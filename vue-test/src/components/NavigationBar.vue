@@ -8,12 +8,12 @@
       <div class="nav-content">
         <ul class="tabs tabs-transparent">
           <li class="tab"><a href="#xsdInput">Xsd Input</a></li>
-          <li class="tab"><a class="active" href="#historyFeed">History Feed</a></li>
+          <li class="tab"><a class="active" href="#historyFeed" v-on:click="initHistoryFeed">History Feed</a></li>
         </ul>
       </div>
     </nav>
     <XsdInput id="xsdInput" class="col s12"></XsdInput>
-    <HistoryFeed id="historyFeed"></HistoryFeed>
+    <HistoryFeed id="historyFeed" ref="historyFeed"></HistoryFeed>
   </div>
 </template>
 
@@ -27,6 +27,11 @@
     data (){
       return {
         classObject: AppConstants.MainColorBackgroundClasses
+      }
+    },
+    methods: {
+      initHistoryFeed : function () {
+        this.$refs.historyFeed.initDownloadLinkList();
       }
     },
     components: {

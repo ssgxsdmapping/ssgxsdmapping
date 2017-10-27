@@ -3,6 +3,8 @@ const XsdProcessorsParam = {
   FILENAME: "FILENAME"
 };
 
+import GenericXsdProcesses from './GenericXsdProcesses.js';
+
 var XsdProcessors = (function () {
   /**
    * Functions that return a list of TemplateIdParam + fileName
@@ -29,34 +31,11 @@ var XsdProcessors = (function () {
 
   var insertNodeName = function (node, outputParams) {
     return new Promise(function (resolve, reject) {
-      retriveNodeAttribute(node, "name")
-        .then(nodeName => insertParamInOutputParams(XsdProcessorsParam.FILENAME, nodeName, outputParams))
-        .then(() => resolve(outputParams));
+      GenericXsdProcesses.retriveNodeAttribute(node, "name")
+        .then(nodeName => GenericXsdProcesses.insertParamInOutputParams(XsdProcessorsParam.FILENAME, nodeName, outputParams))
+        .then((outputParams) => resolve(outputParams));
     })
   }
-
-
-
-  //generic functions
-
-  var retriveNodeAttribute = function (node, attributeName) {
-    return new Promise(function (resolve, reject) {
-      var attributeValue = node.attributes.getNamedItem(attributeName).value;
-      if(attributeValue !== null && attributeValue !== undefined){
-        resolve(attributeValue);
-      }else {
-        reject();
-      }
-    })
-  };
-
-  var insertParamInOutputParams = function (keyName, param, outputParams) {
-    return new Promise(function (resolve, reject) {
-      outputParams[XsdProcessorsParam.FILENAME] = param;
-      console.log("inseted" + outputParams[XsdProcessorsParam.FILENAME])
-      resolve(outputParams);
-    })
-  };
 
   const NodeElementProcessor = {
     "xs:element" : xsElementProcessor,

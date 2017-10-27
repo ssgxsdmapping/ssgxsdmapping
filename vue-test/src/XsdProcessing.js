@@ -35,7 +35,7 @@ var XsdProcessing = (function () {
             filesProcessCounter ++;
             if(filesProcessCounter === filesParams.length){
               zip.generateAsync({type:"blob"}).then(function (content) {
-                //FileSaver.saveAs(content, "test.zip");
+                FileSaver.saveAs(content, "test.zip");
                 const currentDate = new Date().getTime();
                 var storageRef = firebase.storage().ref().child(currentDate + "/" + "test.zip");
                 storageRef.put(content).then(function (snapshot) {

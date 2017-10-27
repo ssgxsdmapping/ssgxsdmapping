@@ -10,18 +10,52 @@ var XsdProcessors = (function () {
 
   const xsElementProcessor = function (node) {
     var outputParams = {};
-    outputParams[XsdProcessorsParam.FILENAME] = getNameFromNode(node);
+    insertNodeName(node, outputParams)
+      .then(outputParamPromise => outputParams = outputParamPromise)
     return outputParams;
   };
   const xsSimpleTypeProcessor = function (node) {
     var outputParams = {};
-    outputParams[XsdProcessorsParam.FILENAME] = getNameFromNode(node);
+    insertNodeName(node, outputParams)
+      .then(outputParamPromise => outputParams = outputParamPromise)
     return outputParams;
   };
   const xsComplexTypeProcessor = function (node) {
     var outputParams = {};
-    outputParams[XsdProcessorsParam.FILENAME] = getNameFromNode(node);
+    insertNodeName(node, outputParams)
+      .then(outputParamPromise => outputParams = outputParamPromise)
     return outputParams;
+  };
+
+  var insertNodeName = function (node, outputParams) {
+    return new Promise(function (resolve, reject) {
+      retriveNodeAttribute(node, "name")
+        .then(nodeName => insertParamInOutputParams(XsdProcessorsParam.FILENAME, nodeName, outputParams))
+        .then(() => resolve(outputParams));
+    })
+  }
+
+
+
+  //generic functions
+
+  var retriveNodeAttribute = function (node, attributeName) {
+    return new Promise(function (resolve, reject) {
+      var attributeValue = node.attributes.getNamedItem(attributeName).value;
+      if(attributeValue !== null && attributeValue !== undefined){
+        resolve(attributeValue);
+      }else {
+        reject();
+      }
+    })
+  };
+
+  var insertParamInOutputParams = function (keyName, param, outputParams) {
+    return new Promise(function (resolve, reject) {
+      outputParams[XsdProcessorsParam.FILENAME] = param;
+      console.log("inseted" + outputParams[XsdProcessorsParam.FILENAME])
+      resolve(outputParams);
+    })
   };
 
   const NodeElementProcessor = {

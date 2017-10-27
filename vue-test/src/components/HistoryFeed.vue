@@ -1,16 +1,23 @@
 <template>
   <div>
-    <ul class="collection">
-      <li class="collection-item" v-for="ddllink in downloadLinks">
-        {{ddllink.date}} ---- {{ddllink.link}}
-      </li>
-    </ul>
+    <table class="highlight">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Download link</th>
+        </tr>
+      </thead>
+      <tbody v-for="ddllink in downloadLinks">
+        <HistoryTableEntry v-bind:ddl-object="ddllink"></HistoryTableEntry>
+      </tbody>
+    </table>
   </div>
 </template>
 
 <script>
 
   import HistoryFeedSeacher from '../HistoryFeedSearcher.js';
+  import HistoryTableEntry from './HistoryTableEntry.vue'
 
   export default {
     name: "HistoryFeed",
@@ -23,6 +30,9 @@
       initDownloadLinkList: function () {
         this.downloadLinks = HistoryFeedSeacher.getDownloadLinkList();
       }
+    },
+    components: {
+      HistoryTableEntry
     }
   }
 </script>

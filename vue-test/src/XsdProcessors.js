@@ -16,7 +16,7 @@ var XsdProcessors = (function () {
   const NodeElementComponents = {
     "xs:element" : [GenericExtractComponent.FILENAME_COMPONENT, GenericExtractComponent.NODETYPE_COMPONENT],
     "xs:simpleType" : [GenericExtractComponent.FILENAME_COMPONENT, GenericExtractComponent.NODETYPE_COMPONENT, GenericExtractComponent.JAVA_TYPE_COMPONENT],
-    "xs:complexType" : [GenericExtractComponent.FILENAME_COMPONENT, GenericExtractComponent.NODETYPE_COMPONENT]
+    "xs:complexType" : [GenericExtractComponent.FILENAME_COMPONENT, GenericExtractComponent.NODETYPE_COMPONENT, GenericExtractComponent.ATTRIBUTEES_COMPONENT]
   };
 
   var processNode = function (node) {
@@ -31,7 +31,9 @@ var XsdProcessors = (function () {
         promiseList.push(componentList[componentNumber].extract(node, outputParams));
       }
 
-      Promise.all(promiseList).then(() => resolve(outputParams))
+      Promise.all(promiseList)
+        .then(() => console.log(outputParams))
+        .then(() => resolve(outputParams))
     })
   };
 

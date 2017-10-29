@@ -13,6 +13,25 @@ var GenericXsdProcess = (function () {
     })
   };
 
+  var retriveAllChildNodesOnNameRecursively = function (node, childName) {
+    return new Promise(function (resolve, reject) {
+      var filteredChildArray = Array.from(node.children).filter(child => child.nodeName.includes(childName));
+
+      if(filteredChildArray !== undefined && filteredChildArray !== null && filteredChildArray.length > 0) {
+        resolve(filteredChildArray)
+      } else {
+        var promiseList = [];
+        Array.from(node.children).forEach(child => {
+          promiseList.push(new Promise(function (resolve, reject) {
+            retriveChildNodeOnNameRecursively(child, childName)
+              .then((foundedChildNode) => resolve(foundedChildNode));
+          }))
+        })
+        Promise.all(promiseList).then(nodeResult => resolve(nodeResult));
+      }
+    })
+  }
+
   var retriveChildNodeOnNameRecursively = function (node, childName) {
     return new Promise(function (resolve, reject) {
       var filteredChildArray = Array.from(node.children).filter(child => child.nodeName.includes(childName));
@@ -39,6 +58,7 @@ var GenericXsdProcess = (function () {
   return{
     retriveNodeAttribute:retriveNodeAttribute,
     retriveChildNodeOnNameRecursively:retriveChildNodeOnNameRecursively,
+    retriveAllChildNodesOnNameRecursively:retriveAllChildNodesOnNameRecursively,
     insertParamInOutputParams:insertParamInOutputParams
   }
 })();

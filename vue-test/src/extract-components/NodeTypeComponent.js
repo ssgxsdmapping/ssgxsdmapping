@@ -3,19 +3,25 @@ import GenericXsdProcesses from '../GenericXsdProcesses.js'
 
 var NodeTypeComponent = (function () {
 
-  const NodeTypeConst = {
-    "element" : "ELEMENT",
-    "simpleType" : "SIMPLE_TYPE",
-    "complexType" : "COMPLEX_TYPE"
+  const NodeTypeKey = {
+    ELEMENT : "ELEMENTS",
+    SIMPLE_TYPE : "SIMPLE_TYPE",
+    COMPLEX_TYPE : "COMPLEX_TYPE"
+  }
+
+  const NodeTypeCorrespondance = {
+    "element" : NodeTypeKey.ELEMENT,
+    "simpleType" : NodeTypeKey.SIMPLE_TYPE,
+    "complexType" : NodeTypeKey.COMPLEX_TYPE
   };
 
   var extract = function (node, outputParams) {
     return new Promise(function (resolve, reject) {
       var nodeName = node.nodeName;
 
-      for(var props in NodeTypeConst){
+      for(var props in NodeTypeCorrespondance){
         if(nodeName.includes(props)){
-          GenericXsdProcesses.insertParamInOutputParams(NodeTypeComponentParamValue, nodeName, outputParams)
+          GenericXsdProcesses.insertParamInOutputParams(NodeTypeComponentParamValue, NodeTypeCorrespondance[props], outputParams)
             .then((outputParams) => resolve(outputParams))
         }
       }

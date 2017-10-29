@@ -8,7 +8,7 @@ var XsdProcessing = (function () {
   var JSZip = require('jszip');
   var FileSaver = require('file-saver');
 
-  var processElements = function(doc){
+  var processElements = function(doc, packageName){
     return new Promise(function (resolve, reject) {
       if(doc.children){
         var filesParams = {};
@@ -17,7 +17,7 @@ var XsdProcessing = (function () {
         var nodeList = Array.from(doc.children[0].children)
         for(var nodeIndex in nodeList) {
           promiseList.push(new Promise(function (resolve, reject) {
-            XsdProcessors.processNode(nodeList[nodeIndex])
+            XsdProcessors.processNode(nodeList[nodeIndex],packageName)
               .then(outputParams => filesParams[outputParams[XsdProcessorsParam.FILENAME]] = outputParams)
               .then(() => resolve());
           }))
@@ -35,7 +35,7 @@ var XsdProcessing = (function () {
 
   var processDocs = function (sourceDoc, targetDoc, packageName) {
     return new Promise(function (resolve, reject) {
-      processElements(sourceDoc)
+      processElements(sourceDoc, packageName)
         .then(filesParams => {
           var filesProcessCounter = 0;
           var zip = new JSZip();

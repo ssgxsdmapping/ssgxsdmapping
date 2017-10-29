@@ -29,6 +29,7 @@ var GenericXsdProcess = (function () {
         })
         Promise.all(promiseList).then(nodeResult => resolve(nodeResult));
       }
+      resolve(undefined)
     })
   }
 
@@ -44,6 +45,7 @@ var GenericXsdProcess = (function () {
             .then((foundedChildNode) => resolve(foundedChildNode));
         })
       }
+      resolve(undefined);
     })
   }
 

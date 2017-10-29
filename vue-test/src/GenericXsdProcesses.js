@@ -8,14 +8,23 @@ var GenericXsdProcess = (function () {
       if(attributeValue !== null && attributeValue !== undefined){
         resolve(attributeValue);
       }else {
-        reject();
+        reject("No attributes of name " + attributeName + " found.");
       }
     })
   };
 
   var retriveChildNodeOnNameRecursively = function (node, childName) {
     return new Promise(function (resolve, reject) {
+      var filteredChildArray = Array.from(node.children).filter(child => child.nodeName.includes(childName));
 
+      if(filteredChildArray !== undefined && filteredChildArray !== null && filteredChildArray.length > 0) {
+        resolve(filteredChildArray[0])
+      } else {
+        Array.from(node.children).forEach(child => {
+          retriveChildNodeOnNameRecursively(child, childName)
+            .then((foundedChildNode) => resolve(foundedChildNode));
+        })
+      }
     })
   }
 

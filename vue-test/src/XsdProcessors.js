@@ -1,53 +1,35 @@
 
 const XsdProcessorsParam = {
-  FILENAME: "FILENAME"
+  FILENAME: "FILENAME", //string
+  NODETYPE: "NODE_TYPE", //string
+  JAVATYPE: "JAVA_TYPE" //string
 };
 
-import GenericXsdProcesses from './GenericXsdProcesses.js';
+const JavaTemplatesParam = {
+
+};
+
+import {GenericExtractComponent} from './extract-components/GenericExtractComponent.js';
 
 var XsdProcessors = (function () {
-  /**
-   * Functions that return a list of TemplateIdParam + fileName
-   */
 
-  const xsElementProcessor = function (node) {
-    var outputParams = {};
-    insertNodeName(node, outputParams)
-      .then(outputParamPromise => outputParams = outputParamPromise)
-    return outputParams;
-  };
-  const xsSimpleTypeProcessor = function (node) {
-    var outputParams = {};
-    insertNodeName(node, outputParams)
-      .then(outputParamPromise => outputParams = outputParamPromise)
-    return outputParams;
-  };
-  const xsComplexTypeProcessor = function (node) {
-    var outputParams = {};
-    insertNodeName(node, outputParams)
-      .then(outputParamPromise => outputParams = outputParamPromise)
-    return outputParams;
-  };
-
-  var insertNodeName = function (node, outputParams) {
-    return new Promise(function (resolve, reject) {
-      GenericXsdProcesses.retriveNodeAttribute(node, "name")
-        .then(nodeName => GenericXsdProcesses.insertParamInOutputParams(XsdProcessorsParam.FILENAME, nodeName, outputParams))
-        .then((outputParams) => resolve(outputParams));
-    })
-  }
-
-  const NodeElementProcessor = {
-    "xs:element" : xsElementProcessor,
-    "xs:simpleType" : xsSimpleTypeProcessor,
-    "xs:complexType" : xsComplexTypeProcessor
+  const NodeElementComponents = {
+    "xs:element" : [GenericExtractComponent.FILENAME_COMPONENT, GenericExtractComponent.NODETYPE_COMPONENT],
+    "xs:simpleType" : [GenericExtractComponent.FILENAME_COMPONENT, GenericExtractComponent.NODETYPE_COMPONENT, GenericExtractComponent.JAVA_TYPE_COMPONENT],
+    "xs:complexType" : [GenericExtractComponent.FILENAME_COMPONENT, GenericExtractComponent.NODETYPE_COMPONENT]
   };
 
   var processNode = function (node) {
-    if(NodeElementProcessor[node.nodeName]){
-      return NodeElementProcessor[node.nodeName](node);
-    }
-    return undefined;
+      //compute components
+      var outputParams = {};
+      var componentList = NodeElementComponents[node.nodeName];
+      for(var componentNumber in componentList){
+        componentList[componentNumber].extract(node, outputParams);
+      }
+
+      //var outputParams = NodeElementProcessor[node.nodeName](node);
+      console.log(outputParams);
+      return outputParams;
   };
 
   var getNameFromNode = function (node) {

@@ -10,14 +10,16 @@ var NodeTypeComponent = (function () {
   };
 
   var extract = function (node, outputParams) {
+    return new Promise(function (resolve, reject) {
       var nodeName = node.nodeName;
 
       for(var props in NodeTypeConst){
         if(nodeName.includes(props)){
           GenericXsdProcesses.insertParamInOutputParams(NodeTypeComponentParamValue, nodeName, outputParams)
-            .then((outputParams) => outputParams)
+            .then((outputParams) => resolve(outputParams))
         }
       }
+    })
 
   };
 

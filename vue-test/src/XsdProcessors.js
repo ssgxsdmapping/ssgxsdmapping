@@ -20,16 +20,19 @@ var XsdProcessors = (function () {
   };
 
   var processNode = function (node) {
+    return new Promise(function (resolve, reject) {
       //compute components
       var outputParams = {};
       var componentList = NodeElementComponents[node.nodeName];
+
+      var promiseList = [];
+
       for(var componentNumber in componentList){
-        componentList[componentNumber].extract(node, outputParams);
+        promiseList.push(componentList[componentNumber].extract(node, outputParams));
       }
 
-      //var outputParams = NodeElementProcessor[node.nodeName](node);
-      console.log(outputParams);
-      return outputParams;
+      Promise.all(promiseList).then(() => resolve(outputParams))
+    })
   };
 
   var getNameFromNode = function (node) {

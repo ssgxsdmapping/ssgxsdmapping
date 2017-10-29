@@ -5,11 +5,13 @@ import {SimpleTypeProcess} from '../SimpleTypeProcess.js'
 var JavaTypeComponent = (function () {
 
   var extract = function (node, outputParams) {
-      GenericXsdProcesses.retriveChildNodeOnNameRecursively(node, "restriction")
-        .then(restrictionNode => GenericXsdProcesses.retriveNodeAttribute(restrictionNode, "base"))
-        .then(simpleTypeBaseName => SimpleTypeProcess.extractJavaTypeFromSimpleString(simpleTypeBaseName))
-        .then(javaTypeName => GenericXsdProcesses.insertParamInOutputParams(JavaTypeComponentParamValue, javaTypeName, outputParams))
-        .then((outputParams) => console.log(outputParams));
+      return new Promise(function (resolve, reject) {
+        GenericXsdProcesses.retriveChildNodeOnNameRecursively(node, "restriction")
+          .then(restrictionNode => GenericXsdProcesses.retriveNodeAttribute(restrictionNode, "base"))
+          .then(simpleTypeBaseName => SimpleTypeProcess.extractJavaTypeFromSimpleString(simpleTypeBaseName))
+          .then(javaTypeName => GenericXsdProcesses.insertParamInOutputParams(JavaTypeComponentParamValue, javaTypeName, outputParams))
+          .then((outputParams) => resolve(outputParams));
+      })
   };
 
 

@@ -13,25 +13,60 @@ var GenericXsdProcess = (function () {
     })
   };
 
-  var retriveAllChildNodesOnNameRecursively = function (node, childName) {
+  //return a list of list of mathing elements
+  var retriveAllChildNodesOnNameRecursively = function (node, childName, resultAccumulator) {
+    if(resultAccumulator === null || resultAccumulator === undefined){
+      resultAccumulator = [];
+    }
     return new Promise(function (resolve, reject) {
-      var filteredChildArray = Array.from(node.children).filter(child => child.nodeName.includes(childName));
 
+      var filteredChildArray = Array.from(node.children).filter(child => child.nodeName.includes(childName));
       if(filteredChildArray !== undefined && filteredChildArray !== null && filteredChildArray.length > 0) {
-        resolve(filteredChildArray)
+        console.log("Node " + node + " treated. Return " + filteredChildArray);
+        console.log(resultAccumulator)
+        resultAccumulator.push(filteredChildArray);
+        resolve(resultAccumulator);
       } else {
         var promiseList = [];
         Array.from(node.children).forEach(child => {
-          promiseList.push(new Promise(function (resolve, reject) {
-            retriveChildNodeOnNameRecursively(child, childName)
-              .then((foundedChildNode) => resolve(foundedChildNode));
-          }))
-        })
-        Promise.all(promiseList).then(nodeResult => resolve(nodeResult));
+          retriveAllChildNodesOnNameRecursively(child, childName, resultAccumulator)
+            .then((resultAccumulator) => console.log("Result of method call : " + resultAccumulator))
+            .then((resultAccumulator) => console.log(resultAccumulator))
+            .then((resultAccumulator) => resolve(resultAccumulator));
+        });
       }
-      resolve(undefined)
+      resolve(resultAccumulator)
+    })
+
+
+  };
+
+  var flattenListRecursively = function (currentElement ,listAccumulator) {
+
+    if(listAccumulator === null || listAccumulator === undefined) {
+      listAccumulator = [];
+    }
+
+    return new Promise(function (resolve, reject) {
+
+      if(currentElement !== null && currentElement !== undefined) {
+        if(!Array.isArray(currentElement)){
+          listAccumulator.push(currentElement);
+        }
+      }
+
+      if(Array.isArray(currentElement)) {
+        currentElement.forEach(function (element) {
+          flattenListRecursively(element, listAccumulator)
+            .then(elements => resolve(elements))
+        })
+      }
+
+      resolve(listAccumulator);
+
     })
   }
+
 
   var retriveChildNodeOnNameRecursively = function (node, childName) {
     return new Promise(function (resolve, reject) {
@@ -61,6 +96,7 @@ var GenericXsdProcess = (function () {
     retriveNodeAttribute:retriveNodeAttribute,
     retriveChildNodeOnNameRecursively:retriveChildNodeOnNameRecursively,
     retriveAllChildNodesOnNameRecursively:retriveAllChildNodesOnNameRecursively,
+    flattenListRecursively:flattenListRecursively,
     insertParamInOutputParams:insertParamInOutputParams
   }
 })();

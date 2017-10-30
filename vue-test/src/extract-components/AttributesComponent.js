@@ -43,4 +43,4 @@ var AttributesComponent = (function () {
 
 const AttributesComponentParamValue = "ATTRIBUTES";
 
-export default AttributesComponent;
+export {AttributesComponent,AttributesComponentParamValue,AttributeObjectKey};

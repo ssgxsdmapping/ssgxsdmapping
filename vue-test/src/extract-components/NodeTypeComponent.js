@@ -3,18 +3,6 @@ import GenericXsdProcesses from '../GenericXsdProcesses.js'
 
 var NodeTypeComponent = (function () {
 
-  const NodeTypeKey = {
-    ELEMENT : "ELEMENTS",
-    SIMPLE_TYPE : "SIMPLE_TYPE",
-    COMPLEX_TYPE : "COMPLEX_TYPE"
-  }
-
-  const NodeTypeCorrespondance = {
-    "element" : NodeTypeKey.ELEMENT,
-    "simpleType" : NodeTypeKey.SIMPLE_TYPE,
-    "complexType" : NodeTypeKey.COMPLEX_TYPE
-  };
-
   var extract = function (node, outputParams) {
     return new Promise(function (resolve, reject) {
       var nodeName = node.nodeName;
@@ -35,7 +23,20 @@ var NodeTypeComponent = (function () {
   }
 })();
 
+const NodeTypeKey = {
+  ELEMENT : "ELEMENTS",
+  SIMPLE_TYPE : "SIMPLE_TYPE",
+  COMPLEX_TYPE : "COMPLEX_TYPE"
+}
+
+const NodeTypeCorrespondance = {
+  "element" : NodeTypeKey.ELEMENT,
+  "simpleType" : NodeTypeKey.SIMPLE_TYPE,
+  "complexType" : NodeTypeKey.COMPLEX_TYPE
+};
+
+
 const NodeTypeComponentParamValue = "NODE_TYPE";
 
 
-export default NodeTypeComponent;
+export {NodeTypeComponent,NodeTypeComponentParamValue, NodeTypeKey};

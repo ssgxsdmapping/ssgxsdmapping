@@ -10,7 +10,11 @@ Vue.config.productionTip = false
 
 //for caching
 JavaTemplate.getStringFromTemplate(TemplatesId.CLASS_TEMPLATE)
-  .catch(e => ToastMessage.displayError("An error occured while contacting the server !"));
+  .then(() => JavaTemplate.getStringFromTemplate(TemplatesId.ATTRIBUTE_TEMPLATE))
+  .catch(e => {
+    console.log(e)
+    ToastMessage.displayError("An error occured while contacting the server !")
+  });
 
 /* eslint-disable no-new */
 new Vue({

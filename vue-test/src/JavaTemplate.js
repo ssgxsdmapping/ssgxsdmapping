@@ -1,11 +1,18 @@
 const TemplateParams = {
-  PACKAGE_NAME: {value: "${packageName}"},
-  CLASS_NAME: {value: "${className}"}
+  PACKAGE_NAME: {value: "${PACKAGE_NAME}"},
+  CLASS_NAME: {value: "${JAVA_TYPE}"},
+  IMPORTS: {value: "${IMPORTS}"},
+  ATTRIBUTES: {value: "${ATTRIBUTES}"},
+  NAME: {value :"${NAME}"}
 };
 
 const TemplatesId = {
   CLASS_TEMPLATE: {templateSrc: "java_class_template.txt", requiredTemplateParams: [TemplateParams.PACKAGE_NAME,
-                                                                                  TemplateParams.CLASS_NAME]}
+                                                                                  TemplateParams.CLASS_NAME,
+                                                                                  TemplateParams.IMPORTS,
+                                                                                  TemplateParams.ATTRIBUTES]},
+  ATTRIBUTE_TEMPLATE: {templateSrc: "java_attribute_template.txt", requiredTemplateParams: [TemplateParams.CLASS_NAME,
+                                                                                          TemplateParams.NAME]}
 };
 
 import JavaTemplateCache from "./JavaTemplateCache";
@@ -39,6 +46,13 @@ var JavaTemplate = (function () {
     })
   }
 
+  var resolveTemplateParam = function (templateParam, templateparamValue, templateString) {
+    return new Promise(function (resolve, reject) {
+      templateString = templateString.replace(new RegExp('\\'+templateParam.value, 'g'), templateparamValue);
+      resolve(templateString);
+    })
+  }
+
   return {
     getStringFromTemplate: function (templateId) {
 
@@ -49,12 +63,16 @@ var JavaTemplate = (function () {
           firebase.storage().ref().child(templateId.templateSrc).getDownloadURL()
             .then(url => getTemplatePromise(templateId, url))
             .then(templateText => resolve(templateText))
-            .catch(e => reject("An error occured while getting template"))
+            .catch(e => {
+              console.log(e)
+              reject("An error occured while getting template")
+            })
         } else {
           resolve(getTryFromCache);
         }
       })
-    }
+    },
+    resolveTemplateParam:resolveTemplateParam
   }
 })();
 

@@ -1,8 +1,8 @@
 
 import FileNameComponent from './FileNameComponent.js'
-import NodeTypeComponent from './NodeTypeComponent.js'
-import JavaTypeComponent from './JavaTypeComponent.js'
-import AttributesComponent from './AttributesComponent.js'
+import {NodeTypeComponent} from './NodeTypeComponent.js'
+import {JavaTypeComponent} from './JavaTypeComponent.js'
+import {AttributesComponent} from './AttributesComponent.js'
 import PackageComponent from './PackageComponent.js'
 
 const GenericExtractComponent = {

@@ -45,4 +45,4 @@ var JavaTypeComponent = (function () {
 
 const JavaTypeComponentParamValue = "JAVA_TYPE";
 
-export default JavaTypeComponent;
+export {JavaTypeComponent,JavaTypeComponentParamValue};
